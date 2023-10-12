@@ -49,3 +49,11 @@ configurazioni. Se tutto va bene dovrei avere l'interfaccia configurata e lo ved
 
 La direttiva `iface` viene letta a tempo di boot solo se l'interfaccia viene abilitata in autoconfigurazione con la
 direttiva `auto <if name>`.
+
+## Nome dell'host
+
+Bisogna agire su `/etc/hosts`, il file che mappa gli indirizzi ip ai corrispondenti nomi.
+
+Di solito ci interessa una risoluzione diretta, ovvero da nome a indirizzo IP.
+Nei pacchetti IP che ci si scambia, i nomi degli host non esistono, e la gestione è completamente locale. Li ritroveremo
+invece nel protocollo HTTP.
