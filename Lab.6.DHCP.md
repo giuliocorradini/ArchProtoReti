@@ -160,3 +160,5 @@ livello locale come richieste unicast verso l'authoritative server.
 
 Come fa il server DHCP a dedurre quale subnet block usare? Analizza su quale interfaccia arriva il pacchetto, e avendo
 un IP sa in che sottorete si trova.
+
+%todo ultimi due esercizi
