@@ -150,6 +150,31 @@ option ms-classless-static-routes code 249 = array of unsigned integer 8;
 
 Impostiamo l'invio di due opzioni differenti per questioni di supporto.
 
+## Esempio di configurazione per subnet
+
+```
+# defines the type of data used to send the static routing information
+# rfc3442
+option classless-routes-lin code 121 = array of unsigned integer 8;
+option classless-routes-win code 249 = array of unsigned integer 8;
+subnet                          192.168.1.0 netmask 255.255.255.0 {
+  range                         192.168.1.100 192.168.1.200;
+  option domain-name-servers    192.168.1.5, 192.168.1.7;
+  option domain-name            "t.home";
+  option server.ddns-domainname "t.home";
+  option subnet-mask            255.255.255.0;
+  option routers                192.168.1.1;
+  option broadcast-address      192.168.1.255;
+  option voip-tftp-server       192.168.1.26;
+         default-lease-time     604800;
+         max-lease-time         86400;
+  option ntp-servers            192.168.1.9;
+  option classless-routes-lin   24, 192,168,2, 192,168,1,254, 0, 192,168,1,1;
+  option classless-routes-win   24, 192,168,2, 192,168,1,254;
+}
+the subnet mask is in the front as CIDR notation and truncates the ip address, the default gateway is just 0
+```
+
 ## Intersubnet
 
 Per far passare una richiesta attraverso un router è configurare un relay server, che inoltra le richieste broadcast a
