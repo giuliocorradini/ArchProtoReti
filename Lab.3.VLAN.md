@@ -144,3 +144,28 @@ arping -i eth0 192.168.1.2
 
 il primo errore è che manca un IP sorgente. Se specifico invece `-0i` ho una richiesta ARP fuori standard perché come
 IP sorgente ho 0.0.0.0, ma va bene. Vedrò traffico solo su `eth0` e non su `eth0.10`.
+
+> Le VLAN si indicano col `.`, all'interno di `/etc/network/interfaces`.
+
+## Assegnamento IP multipli
+
+Per assegnere più indirizzi IP alla stessa interfaccia di rete bisogna utilizzare gli alias, sempre all'interno di `/etc/network/interfaces`.
+
+Un alias è definito su un'interfaccia (ad esempio `eth0`) ed è seguito da un numero separato dai due punti.
+
+```
+auto eth0:0
+iface eth0:0 inet static
+    address 1.2.3.4/32
+```
+
+È diverso dall'impostare una VLAN, quello crea un'interfaccia di rete separata.
+
+Nelle regole di routing possiamo però indicare l'interfaccia fisica `eth0` senza alias per indicare una route link local.
+Ad esempio:
+
+```sh
+ip route add 2.2.2.2/32 dev eth0
+```
+
+è perfettamente valido.

@@ -181,3 +181,54 @@ iptables -nvL
 ```
 
 Possiamo avere tra le possibilità di state: NEW, ESTABLISHED e RELATED.
+
+## Abilitare servizi
+
+In una logica security-first, abbiamo una policy di default di DROP dei pacchetti provenienti
+dalla rete esterna.
+
+```sh
+iptables -t filter -P FORWARD DROP
+```
+
+Ma se abbiamo fatto port forwarding i pacchetti verranno bloccati. Per far passare i pacchetti attraverso il firewall
+abilitiamo queste due regole:
+
+```
+iptables -t filter -A FORWARD -j ACCEPT -i eth0 -d 10.108.54.2 -p tcp --dport 80 -m state --state NEW,ESTABLISHED
+```
+
+la catena è chiaramente FORWARD perché non stiamo operando su processi locali. L'indirizzo si riferisce a un esercizio.
+Quando abbiamo configurato il NAT abbiamo fatto port forwarding di 10.108.54.2:80 su 4.3.2.1:80, visto che FORWARD è una
+fase che si trova dopo il routing, quindi dopo aver fatto DNAT (che sta in prerouting) allora indichiamo l'indirizzo interno
+del server.
+
+`-m state --state NEW,ESTABLISHED` indica che accettiamo connessioni in entrata e pacchetti di flussi già stabiliti. Per farlo
+dobbiamo tenere traccia dello stato col modulo netfilter `state`.
+
+Non basta, infatti i pacchetti di risposta del server non vengono accettati in uscita, aggiungiamo la regola speculare:
+
+```
+iptables -t filter -A FORWARD -j ACCEPT -o eth0 -s 10.108.54.2 -p tcp --sport 80 -m state --state ESTABLISHED
+```
+
+Anche in questo caso devo specificare l'indirizzo interno del server, perché il SNAT avverrà dopo. In questo caso è un SNAT
+gestito dalla regola di DNAT port forwarding.
+
+### Abilitare client interni alla rete
+
+Per abilitare gli host interni a una rete come client di servizi esterni, in una situazione di defualt DROP, aggiungiamo questa
+regola:
+
+```
+iptables -t filter -A FORWARD -j ACCEPT -o eth0 -s 10.108.54.0/24 -p tcp --dport 80 -m state --state NEW,ESTABLISHED
+```
+
+Perché va bene specificare che l'interfaccia di uscita è eth0? Perché ho passato la fase di routing (sono in forward) e so già
+che devo "uscire su Internet". Dal gateway si esce sull'interfaccia eth0.
+
+Aggiungiamo la solita regola complementare:
+
+```
+iptables -t filter -A FORWARD -j ACCEPT -i eth0 -d 10.108.54.0/24 -p tcp --sport 80 -m state --state ESTABLISHED
+```
