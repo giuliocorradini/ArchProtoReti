@@ -180,13 +180,13 @@ the subnet mask is in the front as CIDR notation and truncates the ip address, t
 Per far passare una richiesta attraverso un router è configurare un relay server, che inoltra le richieste broadcast a
 livello locale come richieste unicast verso l'authoritative server.
 
-`INTERFACES=""` lista le interfacce su cui mettere in ascolto il relay.
+`INTERFACES=""` lista le interfacce su cui mettere in ascolto il relay. Vanno listate **tutte** le interfacce su cui
+circoleranno dei pacchetti DHCP.
+
 `SERVERS=""` indica a quali indirizzi inoltrare le richieste.
 
 Come fa il server DHCP a dedurre quale subnet block usare? Analizza su quale interfaccia arriva il pacchetto, e avendo
 un IP sa in che sottorete si trova.
-
-%todo ultimi due esercizi
 
 ## Host
 
