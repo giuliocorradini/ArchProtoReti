@@ -187,3 +187,14 @@ Come fa il server DHCP a dedurre quale subnet block usare? Analizza su quale int
 un IP sa in che sottorete si trova.
 
 %todo ultimi due esercizi
+
+## Host
+
+Per specificare un host usiamo il blocco `host`.
+
+```
+host {
+  hardware ethernet MAC;
+  fixed-address 192.168.1.1;
+}
+```
