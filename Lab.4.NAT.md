@@ -53,3 +53,5 @@ Per inserire una regola in una certa posizione usiamo l'azione `-I` su una caten
 ```
 -I POSTROUTING <pos> <coda regola>
 ```
+
+> Per listare le configurazioni con i numeri aggiungi alla fine `--line-numbers`.
